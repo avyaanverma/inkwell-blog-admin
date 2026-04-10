@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import {NavLink} from "react-router";
 
 const Navbar = () => {
   const getInitialTheme = () => {
@@ -90,18 +91,18 @@ const Navbar = () => {
               )}
             </button>
             <div className="flex items-center gap-2">
-              <a
+              <NavLink
+                to="/login"
                 className="inline-flex h-9 items-center justify-center rounded-lg px-4 text-sm font-medium text-[var(--text-primary)] transition hover:bg-[var(--card-border)]/30"
-                href="/login"
               >
                 Login
-              </a>
-              <a
+              </NavLink>
+              <NavLink
+                to="/register"
                 className="inline-flex h-9 items-center justify-center rounded-lg bg-[var(--accent)] px-4 text-sm font-medium text-white transition hover:bg-[var(--accent-hover)]"
-                href="/register"
               >
                 Sign Up
-              </a>
+              </NavLink>
             </div>
           </nav>
         </div>

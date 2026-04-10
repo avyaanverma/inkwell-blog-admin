@@ -1,28 +1,37 @@
-import React from 'react'
-import { createBrowserRouter, RouterProvider } from 'react-router'
-import Home from '../screens/Home'
-import Login from '../screens/Login'
-import Register from '../screens/Register'
+import { createBrowserRouter, RouterProvider } from "react-router";
+import AppLayout from "../layout/AppLayout";
+import Home from "../screens/Home";
+import Login from "../screens/Login";
+import Register from "../screens/Register";
+import Dashboard from "../screens/Dashboard";
 
 export const router = createBrowserRouter([
   {
-    path: '/',
-    element: <Home />,
+    path: "/",
+    element: <AppLayout />,
+    children: [
+      {
+        index: true,
+        element: <Home />,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "register",
+        element: <Register />,
+      },
+      {
+        path: "dashboard",
+        element: <Dashboard />,
+      },
+    ],
   },
-  {
-    path: '/login',
-    element: <Login />,
-  },
-  {
-    path: '/register',
-    element: <Register />,
-  },
-])
+]);
 
 const AppRoutes = () => {
-  return (
-    <RouterProvider router={router} />
-  )
-}
+  return <RouterProvider router={router} />;
+};
 
-export default AppRoutes
+export default AppRoutes;

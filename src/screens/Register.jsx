@@ -1,20 +1,30 @@
-import React from 'react'
-import Navbar from '../components/Navbar'
-import { useForm } from "react-hook-form"
+import React from "react";
+import Navbar from "../components/Navbar";
+import { useForm } from "react-hook-form";
+import { useAuth } from "../context/AuthContext";
 
 const Register = () => {
-  const {register, reset, handleSubmit, formValues: {errors}} = useForm({
-    mode: true
+  const { register, reset, handleSubmit, getValues } = useForm({
+    mode: "onChange",
   });
+  const { registerUser } = useAuth();
+  const [submitError, setSubmitError] = React.useState("");
+  const [submitSuccess, setSubmitSuccess] = React.useState("");
 
-  const handleForm = ()=>{
-    console.log(formValues)
-  }
+  const handleFormSubmit = (data) => {
+    setSubmitError("");
+    setSubmitSuccess("");
+    const result = registerUser(data);
+    if (!result.ok) {
+      setSubmitError(result.message);
+      return;
+    }
+    setSubmitSuccess("Account created successfully");
+    reset();
+  };
 
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--text-primary)]">
-      <Navbar />
-
       <main className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-5xl items-center justify-center px-4 py-12">
         <section className="w-full max-w-xl rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg)] p-8 shadow-sm">
           <div className="mb-6 flex flex-col items-center gap-3 text-center">
@@ -38,14 +48,19 @@ const Register = () => {
             </div>
             <div>
               <h1 className="text-2xl font-semibold">Create an Account</h1>
-              <p className="mt-1 text-sm text-[var(--text-secondary)]">Join Inkwell to start reading or writing</p>
+              <p className="mt-1 text-sm text-[var(--text-secondary)]">
+                Join Inkwell to start reading or writing
+              </p>
             </div>
           </div>
 
-          <form className="space-y-5">
+          <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-5">
             <div className="space-y-2">
               <label className="text-sm font-medium">Name</label>
               <input
+                {...register("name", {
+                  required: "Please Enter Your Name",
+                })}
                 type="text"
                 placeholder="John Doe"
                 className="w-full rounded-lg border border-[var(--card-border)] bg-transparent px-4 py-2 text-sm text-[var(--text-primary)] outline-none transition focus:border-[var(--accent)]"
@@ -55,6 +70,9 @@ const Register = () => {
             <div className="space-y-2">
               <label className="text-sm font-medium">Email</label>
               <input
+                {...register("email", {
+                  required: "Please Enter Your Email",
+                })}
                 type="email"
                 placeholder="you@example.com"
                 className="w-full rounded-lg border border-[var(--card-border)] bg-transparent px-4 py-2 text-sm text-[var(--text-primary)] outline-none transition focus:border-[var(--accent)]"
@@ -64,6 +82,9 @@ const Register = () => {
             <div className="space-y-2">
               <label className="text-sm font-medium">Password</label>
               <input
+                {...register("password", {
+                  required: "Please Enter Your Password",
+                })}
                 type="password"
                 placeholder="Create a password"
                 className="w-full rounded-lg border border-[var(--card-border)] bg-transparent px-4 py-2 text-sm text-[var(--text-primary)] outline-none transition focus:border-[var(--accent)]"
@@ -73,6 +94,11 @@ const Register = () => {
             <div className="space-y-2">
               <label className="text-sm font-medium">Confirm Password</label>
               <input
+                {...register("confirmPassword", {
+                  required: "Please Confirm Your Password",
+                  validate: (data) =>
+                    data === getValues("password") || "Passwords do not match",
+                })}
                 type="password"
                 placeholder="Confirm your password"
                 className="w-full rounded-lg border border-[var(--card-border)] bg-transparent px-4 py-2 text-sm text-[var(--text-primary)] outline-none transition focus:border-[var(--accent)]"
@@ -84,7 +110,11 @@ const Register = () => {
               <div className="grid gap-3 sm:grid-cols-2">
                 <label className="cursor-pointer">
                   <input
+                    {...register("accountType", {
+                      required: "Select a role type",
+                    })}
                     type="radio"
+                    value="Reader"
                     name="accountType"
                     defaultChecked
                     className="peer sr-only"
@@ -98,6 +128,10 @@ const Register = () => {
                 </label>
                 <label className="cursor-pointer">
                   <input
+                    {...register("accountType", {
+                      required: "Select a role type",
+                    })}
+                    value="Author"
                     type="radio"
                     name="accountType"
                     className="peer sr-only"
@@ -113,15 +147,21 @@ const Register = () => {
             </div>
 
             <button
-              type="button"
+              type="submit"
               className="w-full rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[var(--accent-hover)]"
             >
               Create Account
             </button>
+            {submitError && (
+              <p className="text-sm text-red-500">{submitError}</p>
+            )}
+            {submitSuccess && (
+              <p className="text-sm text-green-500">{submitSuccess}</p>
+            )}
           </form>
 
           <p className="mt-6 text-center text-sm text-[var(--text-secondary)]">
-            Already have an account?{' '}
+            Already have an account?{" "}
             <a className="font-semibold text-[var(--accent)]" href="/login">
               Sign in
             </a>
@@ -129,7 +169,7 @@ const Register = () => {
         </section>
       </main>
     </div>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;

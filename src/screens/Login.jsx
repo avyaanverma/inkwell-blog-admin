@@ -1,11 +1,33 @@
-import React from 'react'
-import Navbar from '../components/Navbar'
+import React from "react";
+import Navbar from "../components/Navbar";
+import { useForm } from "react-hook-form";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router";
 
 const Login = () => {
+  const { register, reset, handleSubmit } = useForm({
+    mode: "onChange",
+  });
+  const { loginUser } = useAuth();
+  const [submitError, setSubmitError] = React.useState("");
+  const [submitSuccess, setSubmitSuccess] = React.useState("");
+  let navigate = useNavigate();
+
+  const handleFormSubmit = (data) => {
+    setSubmitError("");
+    setSubmitSuccess("");
+    const result = loginUser(data);
+    reset();
+    if (!result.ok) {
+      setSubmitError(result.message);
+      return;
+    }
+    setSubmitSuccess("Login successful");
+    navigate("/dashboard");
+  };
+
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--text-primary)]">
-      <Navbar />
-
       <main className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-5xl items-center justify-center px-4 py-12">
         <section className="w-full max-w-md rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg)] p-8 shadow-sm">
           <div className="mb-6 flex flex-col items-center gap-3 text-center">
@@ -29,14 +51,19 @@ const Login = () => {
             </div>
             <div>
               <h1 className="text-2xl font-semibold">Welcome Back</h1>
-              <p className="mt-1 text-sm text-[var(--text-secondary)]">Sign in to your account to continue</p>
+              <p className="mt-1 text-sm text-[var(--text-secondary)]">
+                Sign in to your account to continue
+              </p>
             </div>
           </div>
 
-          <form className="space-y-5">
+          <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-5">
             <div className="space-y-2">
               <label className="text-sm font-medium">Email</label>
               <input
+                {...register("email", {
+                  required: "Please Enter Your Email",
+                })}
                 type="email"
                 placeholder="you@example.com"
                 className="w-full rounded-lg border border-[var(--card-border)] bg-transparent px-4 py-2 text-sm text-[var(--text-primary)] outline-none transition focus:border-[var(--accent)]"
@@ -46,6 +73,9 @@ const Login = () => {
             <div className="space-y-2">
               <label className="text-sm font-medium">Password</label>
               <input
+                {...register("password", {
+                  required: "Please Enter Your Password",
+                })}
                 type="password"
                 placeholder="Enter your password"
                 className="w-full rounded-lg border border-[var(--card-border)] bg-transparent px-4 py-2 text-sm text-[var(--text-primary)] outline-none transition focus:border-[var(--accent)]"
@@ -53,15 +83,21 @@ const Login = () => {
             </div>
 
             <button
-              type="button"
+              type="submit"
               className="w-full rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[var(--accent-hover)]"
             >
               Sign In
             </button>
+            {submitError && (
+              <p className="text-sm text-red-500">{submitError}</p>
+            )}
+            {submitSuccess && (
+              <p className="text-sm text-green-500">{submitSuccess}</p>
+            )}
           </form>
 
           <p className="mt-6 text-center text-sm text-[var(--text-secondary)]">
-            Don&apos;t have an account?{' '}
+            Don&apos;t have an account?{" "}
             <a className="font-semibold text-[var(--accent)]" href="/register">
               Sign up
             </a>
@@ -69,7 +105,7 @@ const Login = () => {
         </section>
       </main>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
