@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const { register, reset, handleSubmit } = useForm({
@@ -21,6 +22,7 @@ const Login = () => {
       setSubmitError(result.message);
       return;
     }
+    toast.success("Login successful.");
     setSubmitSuccess("Login successful");
     navigate("/dashboard");
   };

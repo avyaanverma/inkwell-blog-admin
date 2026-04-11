@@ -30,7 +30,7 @@ const Navbar = () => {
   useEffect(() => {
     const handleOutsideClick = (e) => {
       if (!buttonRef.current) return;
-      if (!buttonRef.current.contains(e.target)) return;
+      if (buttonRef.current.contains(e.target)) return;
 
       showProfileMenu(false);
     };
@@ -41,7 +41,7 @@ const Navbar = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-[#e5e5e5] bg-[#ffffff]/95 backdrop-blur supports-[backdrop-filter]:bg-[#ffffff]/70 dark:border-[#171717] dark:bg-[#040609]/95 dark:supports-[backdrop-filter]:bg-[#040609]/70">
       <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4">
-        <a className="flex items-center gap-2" href="/">
+        <NavLink to="/" className="flex items-center gap-2" >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -61,7 +61,7 @@ const Navbar = () => {
           <span className="text-xl font-semibold tracking-tight text-[#171717] dark:text-[#f5f5f5]">
             Inkwell
           </span>
-        </a>
+        </NavLink>
         <nav className="flex items-center gap-2">
           <button
             onClick={toggleTheme}
@@ -156,9 +156,9 @@ const Navbar = () => {
               {currentUser.accountType}
             </h2>
           </div>
-          <div className="text-black dark:text-white p-2 text-base border-b border-gray-300 dark:border-gray-800 flex gap-5 hover:bg-[#008674] m-2 rounded-xl cursor-pointer">
+          <NavLink to="/dashboard" className="text-black dark:text-white p-2 text-base border-b border-gray-300 dark:border-gray-800 flex gap-5 hover:bg-[#008674] m-2 rounded-xl cursor-pointer">
             <MdOutlineDashboard className="text-gray-300" /> Dashboard
-          </div>
+          </NavLink>
           <div
             onClick={logoutUser}
             className="text-red-500 select-none p-2 text-base flex gap-5 justify-start items-center hover:bg-[#008674] rounded-xl m-2"

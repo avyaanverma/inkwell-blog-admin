@@ -1,5 +1,6 @@
 import React from "react";
-import Navbar from "../components/Navbar";
+import { usePost } from "../context/PostContext";
+import { useAuth } from "../context/AuthContext";
 
 const articles = [
   {
@@ -32,6 +33,35 @@ const articles = [
 ];
 
 const Home = () => {
+  const { posts } = usePost();
+  const { currentUser } = useAuth();
+
+  const formatDate = (value) => {
+    if (!value) return "-";
+    const date = value instanceof Date ? value : new Date(value);
+    if (Number.isNaN(date.getTime())) return "-";
+    return date.toLocaleDateString("en-IN", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  const userArticles = (posts || [])
+    .filter((post) => post.status === "published")
+    .map((post) => ({
+      href: "/dashboard",
+      title: post.title || "Untitled",
+      tags: Array.isArray(post.tags) ? post.tags : [],
+      description: post.excerpt || "No description available.",
+      author: currentUser?.name || "You",
+      date: formatDate(post.createdAt),
+      _createdAt: post.createdAt,
+    }))
+    .sort((a, b) => new Date(b._createdAt) - new Date(a._createdAt));
+
+  const latestArticles = [...userArticles, ...articles];
+
   return (
     <div className="min-h-screen bg-[#f8f8f8] text-[#171717] dark:bg-[#0a0a0a] dark:text-[#f5f5f5]">
       <div className="min-h-[calc(100vh-4rem)]">
@@ -52,14 +82,14 @@ const Home = () => {
                 Latest Articles
               </h2>
               <span className="text-sm text-[#525252] dark:text-[#a1a1a1]">
-                {articles.length} articles
+                {latestArticles.length} articles
               </span>
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {articles.map((article) => (
+              {latestArticles.map((article) => (
                 <a
-                  key={article.title}
+                  key={`${article.title}-${article.date}`}
                   href={article.href}
                   className="group h-full"
                 >
@@ -146,3 +176,4 @@ const Home = () => {
 };
 
 export default Home;
+

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { FiArrowLeft, FiPlus, FiSave } from "react-icons/fi";
 import { IoMdClose, IoMdSend } from "react-icons/io";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
+import { usePost } from "../context/PostContext";
 
 const NewPost = () => {
     const {register,
@@ -12,9 +13,9 @@ const NewPost = () => {
             setValue,
             formState : {errors},
         } = useForm();
-    
-
-        
+    const [tags, setTags] = useState([]);
+    const navigate = useNavigate();
+    let {posts, addPost, stats, setStats} = usePost();
 
     const addTag = (e)=> {
                 if(e.key == "Enter"){
@@ -35,6 +36,22 @@ const NewPost = () => {
       setValues("tags", newTags);
     }
 
+    const handleFormSubmit = (data)=> {
+      data.status = "published";
+      addPost(data);
+      console.log(data);
+      reset();
+      toast.success("Post created successfully.")
+      navigate("/dashboard");
+    }
+    const handleDraftSubmit = (data)=> {
+      data.status = "draft";
+      addPost(data);
+      console.log(data);
+      reset();
+      toast.success("Draft created successfully.")
+      navigate("/dashboard");
+    }
 
     return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="mx-auto w-full max-w-4xl px-4 pb-16 pt-8">
@@ -104,7 +121,7 @@ const NewPost = () => {
             </label>
             <div className="flex gap-2">
               {
-                tags.map((tag, index) => <div key={index} className="flex gap-2 justify-center items-center text-black bg-[#eeeeee] text-xs px-2 py-1 rounded-xl dark:text-white"> {tag} <IoMdClose onClick={()=> removeTag(index)}/></div>)
+                tags.map((tag, index) => <div key={index} className="flex gap-2 justify-center items-center text-black dark:text-black bg-[#eeeeee] text-xs px-2 py-1 rounded-xl dark:text-white"> {tag} <IoMdClose onClick={()=> removeTag(index)}/></div>)
               }
             </div>
             <input
@@ -120,7 +137,7 @@ const NewPost = () => {
         </div>
 
         <div className="mt-8 flex flex-col items-stretch justify-end gap-3 sm:flex-row sm:items-center">
-          <button className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#d9d9d9] bg-white px-4 py-2 text-sm font-semibold text-[#171717] transition hover:border-[#b8b8b8] hover:bg-[#f3f3f3] dark:border-[#2a2f36] dark:bg-[#0f141a] dark:text-[#f5f5f5] dark:hover:border-[#3a424c] dark:hover:bg-[#141a22]">
+          <button onClick={handleSubmit(handleDraftSubmit)} className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#d9d9d9] bg-white px-4 py-2 text-sm font-semibold text-[#171717] transition hover:border-[#b8b8b8] hover:bg-[#f3f3f3] dark:border-[#2a2f36] dark:bg-[#0f141a] dark:text-[#f5f5f5] dark:hover:border-[#3a424c] dark:hover:bg-[#141a22]">
             <FiSave className="text-base" />
             Save as Draft
           </button>

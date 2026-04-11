@@ -2,6 +2,8 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 const Register = () => {
   const { register, reset, handleSubmit, getValues } = useForm({
@@ -10,6 +12,7 @@ const Register = () => {
   const { registerUser } = useAuth();
   const [submitError, setSubmitError] = React.useState("");
   const [submitSuccess, setSubmitSuccess] = React.useState("");
+  let navigate = useNavigate();
 
   const handleFormSubmit = (data) => {
     setSubmitError("");
@@ -20,7 +23,10 @@ const Register = () => {
       return;
     }
     setSubmitSuccess("Account created successfully");
+    toast.success("Account created successfully.")
     reset();
+    navigate("/login");
+
   };
 
   return (

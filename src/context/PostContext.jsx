@@ -1,31 +1,63 @@
 import { createContext, useContext, useState } from "react";
 
 const PostContext = createContext(null);
+const statCards = [
+  { label: "Total Articles", value: "0", accent: "text-[#171717] dark:text-[#f5f5f5]" },
+  { label: "Published", value: "0", accent: "text-[#1966ac] dark:text-[#00a48f]" },
+  { label: "Drafts", value: "0", accent: "text-[#171717] dark:text-[#f5f5f5]" },
+];
+export const PostProvider = ({children})=>{
+    const [posts, setPosts] = useState(JSON.parse(localStorage.getItem("posts")) || []);
 
-const PostProvider = ({children})=>{
-    const [posts, setPosts] = useState(localStorage.getItem("posts") | []);
+    const calPosts = (posts)=>{
+        let drafts = posts.reduce((a, post)=> {
+            return post.status == "draft" ? a+1 : a;
+        },0);
+        let publishedPosts = posts.reduce((a, post)=> {
+            return post.status == "published" ? a+1 : a;
+        },0);
+        return {drafts, publishedPosts};
+    }
+        
+    let {publishedPosts, drafts} = calPosts(posts);
+    const [stats, setStats] = useState([
+        { label: "Total Articles", value: drafts + publishedPosts, accent: "text-[#171717] dark:text-[#f5f5f5]" },
+        { label: "Published", value: publishedPosts, accent: "text-[#1966ac] dark:text-[#00a48f]" },
+        { label: "Drafts", value: drafts, accent: "text-[#171717] dark:text-[#f5f5f5]" },
+    ])
+
 
     // addPost
     const addPost = (post)=>{
         const id = posts.length;
-        setPosts([...posts, {
+        const updatedPosts = [...posts, {
             id: id,
             createdAt: new Date(),
             ...post
-        }])
+        }]
+        setPosts(updatedPosts)
+
+        let {publishedPosts, drafts} = calPosts(updatedPosts);
+        setStats([
+            { label: "Total Articles", value: publishedPosts + drafts, accent: "text-[#171717] dark:text-[#f5f5f5]" },
+            { label: "Published", value: publishedPosts, accent: "text-[#1966ac] dark:text-[#00a48f]" },
+            { label: "Drafts", value: drafts, accent: "text-[#171717] dark:text-[#f5f5f5]" },
+        ])
+        localStorage.setItem("posts", JSON.stringify(posts));
     }
     
     // editPost
     const editPost = (updatedPost)=>{
-        setPosts((prev)=>
-            prev.map((post)=> {
+        const updatedPosts = posts.map((post)=> {
                 if(post.id === updatedPost.id){
                     return { ...post, ...updatedPost}
                 }else{
                     return post;
                 }
-            }
-        ))
+            })
+        setPosts(updatedPosts)
+        localStorage.setItem("posts", JSON.stringify(updatedPosts));
+
     }
 
     // deletePost
@@ -34,11 +66,13 @@ const PostProvider = ({children})=>{
         const updatedPost = posts.filter( (post) => id != post.id);
 
         setPosts([...updatedPost])
+        localStorage.setItem("posts", JSON.stringify(updatedPost));
+
     }
 
-    return <PostContext.Provider values = {{posts, addPost, editPost, deletePost}}>
+    return <PostContext.Provider value = {{posts, stats, addPost, editPost, deletePost}}>
         {children}
     </PostContext.Provider>
 }
 
-export const usePost = useContext(PostContext);
+export const usePost = ()=> useContext(PostContext);
