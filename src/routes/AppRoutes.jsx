@@ -4,6 +4,8 @@ import Home from "../screens/Home";
 import Login from "../screens/Login";
 import Register from "../screens/Register";
 import Dashboard from "../screens/Dashboard";
+import ProtectedLayout from "../layout/ProtectedLayout";
+import NewPost from "../screens/NewPost";
 
 export const router = createBrowserRouter([
   {
@@ -22,12 +24,22 @@ export const router = createBrowserRouter([
         path: "register",
         element: <Register />,
       },
-      {
-        path: "dashboard",
-        element: <Dashboard />,
-      },
     ],
   },
+  {
+    path: "/dashboard",
+    element: <ProtectedLayout/>,
+    children: [
+      {
+        index: true,
+        element: <Dashboard/>
+      },
+      {
+        path: "new",
+        element: <NewPost/>
+      }
+    ]
+  }
 ]);
 
 const AppRoutes = () => {

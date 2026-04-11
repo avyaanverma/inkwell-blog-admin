@@ -33,14 +33,14 @@ const articles = [
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--text-primary)]">
+    <div className="min-h-screen bg-[#f8f8f8] text-[#171717] dark:bg-[#0a0a0a] dark:text-[#f5f5f5]">
       <div className="min-h-[calc(100vh-4rem)]">
         <main className="mx-auto max-w-5xl px-4 py-12">
           <section className="mb-12 text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-[var(--text-primary)] sm:text-5xl">
-              Welcome to <span className="text-[var(--accent)]">Inkwell</span>
+            <h1 className="text-4xl font-bold tracking-tight text-[#171717] dark:text-[#f5f5f5] sm:text-5xl">
+              Welcome to <span className="text-[#1966ac] dark:text-[#008574]">Inkwell</span>
             </h1>
-            <p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-[var(--text-secondary)]">
+            <p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-[#525252] dark:text-[#a1a1a1]">
               Discover thoughtful articles on technology, programming, and
               software engineering from passionate writers.
             </p>
@@ -48,10 +48,10 @@ const Home = () => {
 
           <section>
             <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <h2 className="text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
+              <h2 className="text-2xl font-semibold tracking-tight text-[#171717] dark:text-[#f5f5f5]">
                 Latest Articles
               </h2>
-              <span className="text-sm text-[var(--text-secondary)]">
+              <span className="text-sm text-[#525252] dark:text-[#a1a1a1]">
                 {articles.length} articles
               </span>
             </div>
@@ -63,30 +63,30 @@ const Home = () => {
                   href={article.href}
                   className="group h-full"
                 >
-                  <div className="flex h-full flex-col gap-6 rounded-xl border border-[var(--card-border)] bg-[var(--card-bg)] p-6 text-[var(--text-primary)] shadow-sm transition duration-300 hover:border-[var(--accent-soft)] hover:shadow-[0_14px_30px_-18px_var(--accent-shadow)]">
+                  <div className="flex h-full flex-col gap-6 rounded-xl border border-[#d7d7d7] bg-[#ffffff] p-6 text-[#171717] shadow-sm transition duration-300 hover:border-[#1966ac33] hover:shadow-[0_14px_30px_-18px_rgba(25,102,172,0.18)] dark:border-[#25292e] dark:bg-[#171717] dark:text-[#f5f5f5] dark:hover:border-[#00857499] dark:hover:shadow-[0_14px_30px_-18px_rgba(0,133,116,0.22)]">
                     <div className="grid auto-rows-min gap-2 pb-3">
                       <div className="flex flex-wrap gap-2">
                         {article.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="rounded-md border border-[var(--chip-border)] bg-[var(--chip-bg)] px-2 py-1 text-xs font-medium text-[var(--chip-text)]"
+                            className="rounded-md border border-[#d7d7d7] bg-[#ebebeb] px-2 py-1 text-xs font-medium text-[#262626] dark:border-[#25292e] dark:bg-[#171b1f] dark:text-[#e5e5e5]"
                           >
                             {tag}
                           </span>
                         ))}
                       </div>
-                      <h2 className="text-xl w-2/3 font-semibold leading-tight tracking-tight text-[var(--text-primary)] transition-colors group-hover:text-[var(--accent)]">
+                      <h2 className="text-xl w-2/3 font-semibold leading-tight tracking-tight text-[#171717] transition-colors group-hover:text-[#1966ac] dark:text-[#f5f5f5] dark:group-hover:text-[#008574]">
                         {article.title}
                       </h2>
                     </div>
 
                     <div className="px-0 pb-4">
-                      <p className="line-clamp-3 text-[var(--text-secondary)]">
+                      <p className="line-clamp-3 text-[#525252] dark:text-[#a1a1a1]">
                         {article.description}
                       </p>
                     </div>
 
-                    <div className="mt-auto flex items-center justify-between text-sm text-[var(--text-muted)]">
+                    <div className="mt-auto flex items-center justify-between text-sm text-[#8f8f8f] dark:text-[#8f8f8f]">
                       <div className="flex items-center gap-1.5">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

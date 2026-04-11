@@ -1,5 +1,73 @@
+import React from "react";
+import { FiFileText, FiPlus } from "react-icons/fi";
+import { useAuth } from "../context/AuthContext";
+import { NavLink } from "react-router";
+
+const statCards = [
+  { label: "Total Articles", value: "0", accent: "text-[#171717] dark:text-[#f5f5f5]" },
+  { label: "Published", value: "0", accent: "text-[#1966ac] dark:text-[#00a48f]" },
+  { label: "Drafts", value: "0", accent: "text-[#171717] dark:text-[#f5f5f5]" },
+];
+
 const Dashboard = () => {
-  return <div>Dashboard</div>;
+  let {currentUser} = useAuth();
+  return (
+    <div className="mx-auto w-full max-w-5xl px-4 pb-16 pt-10">
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 className="text-3xl font-semibold tracking-tight text-[#171717] dark:text-[#f5f5f5]">
+              Dashboard
+            </h1>
+            <p className="mt-2 text-sm text-[#6b6b6b] dark:text-[#9aa0a6]">
+              Manage your articles, {currentUser.name}
+            </p>
+          </div>
+          <NavLink to="/dashboard/new" className="inline-flex items-center gap-2 rounded-lg bg-[#1966ac] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#0f5897] dark:bg-[#008574] dark:hover:bg-[#009588]">
+            <FiPlus className="text-base" />
+            New Article
+          </NavLink>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-3">
+          {statCards.map((card) => (
+            <div
+              key={card.label}
+              className="rounded-2xl border border-[#e4e4e4] bg-white/90 p-6 shadow-[0_10px_30px_rgba(13,20,26,0.08)] dark:border-[#1b1f24] dark:bg-[#0a0e11]/80"
+            >
+              <p className="text-sm text-[#6b6b6b] dark:text-[#9aa0a6]">{card.label}</p>
+              <p className={`mt-3 text-2xl font-semibold ${card.accent}`}>{card.value}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-2">
+          <h2 className="text-lg font-semibold text-[#171717] dark:text-[#f5f5f5]">
+            Your Articles
+          </h2>
+          <div className="mt-4 rounded-2xl border border-[#e4e4e4] bg-white/90 p-10 shadow-[0_10px_30px_rgba(13,20,26,0.08)] dark:border-[#1b1f24] dark:bg-[#0a0e11]/80">
+            <div className="flex flex-col items-center justify-center gap-3 text-center">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[#e4e4e4] bg-white text-[#5c5c5c] dark:border-[#1b1f24] dark:bg-[#0b1015] dark:text-[#9aa0a6]">
+                <FiFileText className="text-2xl" />
+              </div>
+              <div>
+                <p className="text-base font-semibold text-[#171717] dark:text-[#f5f5f5]">
+                  No articles yet
+                </p>
+                <p className="mt-1 text-sm text-[#6b6b6b] dark:text-[#9aa0a6]">
+                  Start writing your first article
+                </p>
+              </div>
+              <button className="mt-2 inline-flex items-center gap-2 rounded-lg bg-[#1966ac] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#0f5897] dark:bg-[#008574] dark:hover:bg-[#009588]">
+                <FiPlus className="text-base" />
+                Create Article
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Dashboard;

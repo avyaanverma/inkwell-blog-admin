@@ -42,3 +42,44 @@ vim.keymap.set("n", "<leader>lr", function()
     vim.lsp.buf.rename()
   end
 end, { desc = "LSP rename" })
+
+-- Save with Ctrl+S
+vim.keymap.set({ "n", "i", "v" }, "<C-s>", function()
+  vim.cmd("write")
+end, { desc = "Save file" })
+
+-- Simple rafce snippet (type `rafce` then press Tab to expand)
+_G.rafce_snippet = function()
+  local name = vim.fn.expand("%:t:r")
+  if name == nil or name == "" then
+    name = "Component"
+  end
+  return table.concat({
+    "import React from \"react\";",
+    "",
+    "const " .. name .. " = () => {",
+    "  return (",
+    "    <div>" .. name .. "</div>",
+    "  );",
+    "};",
+    "",
+    "export default " .. name .. ";",
+  }, "\n")
+end
+
+_G.rafce_or_tab = function()
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+  local line = vim.api.nvim_get_current_line()
+  local before = line:sub(1, col)
+  if before:sub(-5) == "rafce" then
+    local snippet = _G.rafce_snippet()
+    local lines = vim.split(snippet, "\n", { plain = true })
+    vim.api.nvim_buf_set_text(0, row - 1, col - 5, row - 1, col, lines)
+    local last = lines[#lines] or ""
+    vim.api.nvim_win_set_cursor(0, { row - 1 + #lines, #last })
+    return ""
+  end
+  return "\t"
+end
+
+vim.keymap.set("i", "<Tab>", "v:lua.rafce_or_tab()", { expr = true, silent = true })

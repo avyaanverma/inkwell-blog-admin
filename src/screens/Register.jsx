@@ -24,11 +24,11 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--text-primary)]">
+    <div className="min-h-screen bg-[#f8f8f8] text-[#171717] dark:bg-[#0a0a0a] dark:text-[#f5f5f5]">
       <main className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-5xl items-center justify-center px-4 py-12">
-        <section className="w-full max-w-xl rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg)] p-8 shadow-sm">
+        <section className="w-full max-w-xl rounded-2xl border border-[#d7d7d7] bg-[#ffffff] p-8 shadow-sm dark:border-[#25292e] dark:bg-[#171717]">
           <div className="mb-6 flex flex-col items-center gap-3 text-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--accent)]/15 text-[var(--accent)]">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#1966ac]/15 text-[#1966ac] dark:bg-[#008574]/15 dark:text-[#008574]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -48,7 +48,7 @@ const Register = () => {
             </div>
             <div>
               <h1 className="text-2xl font-semibold">Create an Account</h1>
-              <p className="mt-1 text-sm text-[var(--text-secondary)]">
+              <p className="mt-1 text-sm text-[#525252] dark:text-[#a1a1a1]">
                 Join Inkwell to start reading or writing
               </p>
             </div>
@@ -63,7 +63,7 @@ const Register = () => {
                 })}
                 type="text"
                 placeholder="John Doe"
-                className="w-full rounded-lg border border-[var(--card-border)] bg-transparent px-4 py-2 text-sm text-[var(--text-primary)] outline-none transition focus:border-[var(--accent)]"
+                className="w-full rounded-lg border border-[#d7d7d7] bg-transparent px-4 py-2 text-sm text-[#171717] outline-none transition focus:border-[#1966ac] dark:border-[#25292e] dark:text-[#f5f5f5] dark:focus:border-[#008574]"
               />
             </div>
 
@@ -75,7 +75,7 @@ const Register = () => {
                 })}
                 type="email"
                 placeholder="you@example.com"
-                className="w-full rounded-lg border border-[var(--card-border)] bg-transparent px-4 py-2 text-sm text-[var(--text-primary)] outline-none transition focus:border-[var(--accent)]"
+                className="w-full rounded-lg border border-[#d7d7d7] bg-transparent px-4 py-2 text-sm text-[#171717] outline-none transition focus:border-[#1966ac] dark:border-[#25292e] dark:text-[#f5f5f5] dark:focus:border-[#008574]"
               />
             </div>
 
@@ -87,7 +87,7 @@ const Register = () => {
                 })}
                 type="password"
                 placeholder="Create a password"
-                className="w-full rounded-lg border border-[var(--card-border)] bg-transparent px-4 py-2 text-sm text-[var(--text-primary)] outline-none transition focus:border-[var(--accent)]"
+                className="w-full rounded-lg border border-[#d7d7d7] bg-transparent px-4 py-2 text-sm text-[#171717] outline-none transition focus:border-[#1966ac] dark:border-[#25292e] dark:text-[#f5f5f5] dark:focus:border-[#008574]"
               />
             </div>
 
@@ -101,7 +101,7 @@ const Register = () => {
                 })}
                 type="password"
                 placeholder="Confirm your password"
-                className="w-full rounded-lg border border-[var(--card-border)] bg-transparent px-4 py-2 text-sm text-[var(--text-primary)] outline-none transition focus:border-[var(--accent)]"
+                className="w-full rounded-lg border border-[#d7d7d7] bg-transparent px-4 py-2 text-sm text-[#171717] outline-none transition focus:border-[#1966ac] dark:border-[#25292e] dark:text-[#f5f5f5] dark:focus:border-[#008574]"
               />
             </div>
 
@@ -119,9 +119,9 @@ const Register = () => {
                     defaultChecked
                     className="peer sr-only"
                   />
-                  <span className="block rounded-xl border border-[var(--card-border)] bg-transparent px-4 py-3 text-left text-sm font-semibold text-[var(--text-primary)] transition peer-checked:border-[var(--accent)] peer-checked:bg-[var(--accent)]/10 peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--accent)]/40">
+                  <span className="block rounded-xl border border-[#d7d7d7] bg-transparent px-4 py-3 text-left text-sm font-semibold text-[#171717] transition peer-checked:border-[#1966ac] peer-checked:bg-[#1966ac]/10 peer-focus-visible:ring-2 peer-focus-visible:ring-[#1966ac]/40 dark:border-[#25292e] dark:text-[#f5f5f5] dark:peer-checked:border-[#008574] dark:peer-checked:bg-[#008574]/10 dark:peer-focus-visible:ring-[#008574]/40">
                     Reader
-                    <span className="mt-1 block text-xs font-normal text-[var(--text-secondary)]">
+                    <span className="mt-1 block text-xs font-normal text-[#525252] dark:text-[#a1a1a1]">
                       Read articles
                     </span>
                   </span>
@@ -136,9 +136,9 @@ const Register = () => {
                     name="accountType"
                     className="peer sr-only"
                   />
-                  <span className="block rounded-xl border border-[var(--card-border)] bg-transparent px-4 py-3 text-left text-sm font-semibold text-[var(--text-primary)] transition peer-checked:border-[var(--accent)] peer-checked:bg-[var(--accent)]/10 peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--accent)]/40">
+                  <span className="block rounded-xl border border-[#d7d7d7] bg-transparent px-4 py-3 text-left text-sm font-semibold text-[#171717] transition peer-checked:border-[#1966ac] peer-checked:bg-[#1966ac]/10 peer-focus-visible:ring-2 peer-focus-visible:ring-[#1966ac]/40 dark:border-[#25292e] dark:text-[#f5f5f5] dark:peer-checked:border-[#008574] dark:peer-checked:bg-[#008574]/10 dark:peer-focus-visible:ring-[#008574]/40">
                     Author
-                    <span className="mt-1 block text-xs font-normal text-[var(--text-secondary)]">
+                    <span className="mt-1 block text-xs font-normal text-[#525252] dark:text-[#a1a1a1]">
                       Write &amp; publish
                     </span>
                   </span>
@@ -148,7 +148,7 @@ const Register = () => {
 
             <button
               type="submit"
-              className="w-full rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[var(--accent-hover)]"
+              className="w-full rounded-lg bg-[#1966ac] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#00579a] dark:bg-[#008574] dark:hover:bg-[#009588]"
             >
               Create Account
             </button>
@@ -160,9 +160,9 @@ const Register = () => {
             )}
           </form>
 
-          <p className="mt-6 text-center text-sm text-[var(--text-secondary)]">
+          <p className="mt-6 text-center text-sm text-[#525252] dark:text-[#a1a1a1]">
             Already have an account?{" "}
-            <a className="font-semibold text-[var(--accent)]" href="/login">
+            <a className="font-semibold text-[#1966ac] dark:text-[#008574]" href="/login">
               Sign in
             </a>
           </p>
