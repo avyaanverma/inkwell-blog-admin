@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiArrowLeft, FiPlus, FiSave } from "react-icons/fi";
 import { IoMdClose, IoMdSend } from "react-icons/io";
-import { NavLink, useNavigate } from "react-router";
+import { NavLink, useNavigate, useParams } from "react-router";
 import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import { usePost } from "../context/PostContext";
@@ -11,11 +11,27 @@ const NewPost = () => {
             reset, 
             handleSubmit,
             setValue,
-            formState : {errors},
-        } = useForm();
+            formState : {errors, isValid},
+        } = useForm({ mode: "onChange" });
     const [tags, setTags] = useState([]);
     const navigate = useNavigate();
-    let {posts, addPost, stats, setStats} = usePost();
+    const { id } = useParams();
+    let {posts, addPost, editPost} = usePost();
+    const isEdit = Boolean(id);
+    const existingPost = (posts || []).find((item) => String(item.id) === String(id));
+
+    useEffect(() => {
+      if (isEdit && existingPost) {
+        reset({
+          title: existingPost.title || "",
+          excerpt: existingPost.excerpt || "",
+          content: existingPost.content || "",
+        });
+        const existingTags = existingPost.tags || [];
+        setTags(existingTags);
+        setValue("tags", existingTags);
+      }
+    }, [isEdit, existingPost, reset, setValue]);
 
     const addTag = (e)=> {
                 if(e.key == "Enter"){
@@ -30,26 +46,34 @@ const NewPost = () => {
               }
 
     const removeTag = (index)=>{
-      const newTags = tags.filter((tag)=> tag.id != index);
+      const newTags = tags.filter((_, i)=> i != index);
 
       setTags(newTags);
-      setValues("tags", newTags);
+      setValue("tags", newTags);
     }
 
     const handleFormSubmit = (data)=> {
       data.status = "published";
-      addPost(data);
-      console.log(data);
+      if (isEdit && existingPost) {
+        editPost({ ...existingPost, ...data });
+        toast.success("Post updated successfully.");
+      } else {
+        addPost(data);
+        toast.success("Post created successfully.");
+      }
       reset();
-      toast.success("Post created successfully.")
       navigate("/dashboard");
     }
     const handleDraftSubmit = (data)=> {
       data.status = "draft";
-      addPost(data);
-      console.log(data);
+      if (isEdit && existingPost) {
+        editPost({ ...existingPost, ...data });
+        toast.success("Draft updated successfully.");
+      } else {
+        addPost(data);
+        toast.success("Draft created successfully.");
+      }
       reset();
-      toast.success("Draft created successfully.")
       navigate("/dashboard");
     }
 
@@ -62,7 +86,7 @@ const NewPost = () => {
 
       <div className="rounded-2xl border border-[#e4e4e4] bg-white/90 p-6 shadow-[0_12px_30px_rgba(13,20,26,0.08)] dark:border-[#1b1f24] dark:bg-[#0a0e11]/85 md:p-8">
         <h1 className="text-xl font-semibold text-[#171717] dark:text-[#f5f5f5]">
-          Create New Article
+          {isEdit ? "Edit Article" : "Create New Article"}
         </h1>
 
         <div className="mt-6 space-y-6">
@@ -121,7 +145,7 @@ const NewPost = () => {
             </label>
             <div className="flex gap-2">
               {
-                tags.map((tag, index) => <div key={index} className="flex gap-2 justify-center items-center text-black dark:text-black bg-[#eeeeee] text-xs px-2 py-1 rounded-xl dark:text-white"> {tag} <IoMdClose onClick={()=> removeTag(index)}/></div>)
+                tags.map((tag, index) => <div key={index} className="flex gap-2 dark:bg-[#0f141a] dark:text-[#f5f5f5] justify-center items-center text-black dark:text-black bg-[#eeeeee] text-xs px-2 py-1 rounded-xl dark:text-white"> {tag} <IoMdClose onClick={()=> removeTag(index)}/></div>)
               }
             </div>
             <input
@@ -130,6 +154,7 @@ const NewPost = () => {
               className="mt-2 w-full rounded-lg border border-[#d9d9d9] bg-white px-4 py-2 text-sm text-[#171717] outline-none transition focus:border-[#1966ac] focus:ring-2 focus:ring-[#1966ac]/30 dark:border-[#2a2f36] dark:bg-[#0f141a] dark:text-[#f5f5f5] dark:focus:border-[#00a48f] dark:focus:ring-[#00a48f]/30"
               onKeyDown={addTag}
             />
+            <input type="hidden" {...register("tags")} />
             <p className="mt-2 text-xs text-[#6b6b6b] dark:text-[#9aa0a6]">
               Add up to 5 tags to help readers find your article
             </p>
@@ -137,11 +162,11 @@ const NewPost = () => {
         </div>
 
         <div className="mt-8 flex flex-col items-stretch justify-end gap-3 sm:flex-row sm:items-center">
-          <button onClick={handleSubmit(handleDraftSubmit)} className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#d9d9d9] bg-white px-4 py-2 text-sm font-semibold text-[#171717] transition hover:border-[#b8b8b8] hover:bg-[#f3f3f3] dark:border-[#2a2f36] dark:bg-[#0f141a] dark:text-[#f5f5f5] dark:hover:border-[#3a424c] dark:hover:bg-[#141a22]">
+          <button disabled={!isValid} onClick={handleSubmit(handleDraftSubmit)} className="disabled:opacity-50 inline-flex items-center justify-center gap-2 rounded-lg border border-[#d9d9d9] bg-white px-4 py-2 text-sm font-semibold text-[#171717] transition hover:border-[#b8b8b8] hover:bg-[#f3f3f3] dark:border-[#2a2f36] dark:bg-[#0f141a] dark:text-[#f5f5f5] dark:hover:border-[#3a424c] dark:hover:bg-[#141a22]">
             <FiSave className="text-base" />
             Save as Draft
           </button>
-          <button onClick={handleSubmit(handleFormSubmit)} className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1966ac] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#0f5897] dark:bg-[#008574] dark:hover:bg-[#009588]">
+          <button disabled={!isValid} onClick={handleSubmit(handleFormSubmit)} className="disabled:opacity-50 inline-flex items-center justify-center gap-2 rounded-lg bg-[#1966ac] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#0f5897] dark:bg-[#008574] dark:hover:bg-[#009588]">
             <IoMdSend className="text-base" />
             Publish
           </button>

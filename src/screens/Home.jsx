@@ -50,7 +50,7 @@ const Home = () => {
   const userArticles = (posts || [])
     .filter((post) => post.status === "published")
     .map((post) => ({
-      href: "/dashboard",
+      href: `/blog/${post.id}`,
       title: post.title || "Untitled",
       tags: Array.isArray(post.tags) ? post.tags : [],
       description: post.excerpt || "No description available.",
@@ -176,4 +176,3 @@ const Home = () => {
 };
 
 export default Home;
-

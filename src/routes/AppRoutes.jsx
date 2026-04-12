@@ -6,6 +6,7 @@ import Register from "../screens/Register";
 import Dashboard from "../screens/Dashboard";
 import ProtectedLayout from "../layout/ProtectedLayout";
 import NewPost from "../screens/NewPost";
+import Post from "../screens/Post";
 
 export const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ export const router = createBrowserRouter([
         path: "register",
         element: <Register />,
       },
+      {
+        path: "blog/:id",
+        element: <Post/>
+      }
     ],
   },
   {
@@ -35,7 +40,11 @@ export const router = createBrowserRouter([
         element: <Dashboard/>
       },
       {
-        path: "new",
+        path: "posts/new",
+        element: <NewPost/>
+      },
+      {
+        path: "posts/:id/edit",
         element: <NewPost/>
       }
     ]

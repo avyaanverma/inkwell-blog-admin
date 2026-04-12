@@ -1,18 +1,20 @@
 import React from "react";
-import { FiFileText, FiPlus } from "react-icons/fi";
+import { FiEdit, FiFileText, FiPlus } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { usePost } from "../context/PostContext";
+import { MdDeleteForever } from "react-icons/md";
 
 
 const Dashboard = () => {
   let {currentUser} = useAuth();
-  let {stats, posts} = usePost();
+  let {stats, posts, deletePost} = usePost();
+  let navigate = useNavigate();
 
   const formatDate = (value) => {
-    if (!value) return "—";
+    if (!value) return "-";
     const date = value instanceof Date ? value : new Date(value);
-    if (Number.isNaN(date.getTime())) return "—";
+    if (Number.isNaN(date.getTime())) return "-";
     return date.toLocaleDateString("en-IN", {
       year: "numeric",
       month: "short",
@@ -32,7 +34,7 @@ const Dashboard = () => {
               Manage your articles, {currentUser.name}
             </p>
           </div>
-          <NavLink to="/dashboard/new" className="inline-flex items-center gap-2 rounded-lg bg-[#1966ac] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#0f5897] dark:bg-[#008574] dark:hover:bg-[#009588]">
+          <NavLink to="/dashboard/posts/new" className="inline-flex items-center gap-2 rounded-lg bg-[#1966ac] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#0f5897] dark:bg-[#008574] dark:hover:bg-[#009588]">
             <FiPlus className="text-base" />
             New Article
           </NavLink>
@@ -83,9 +85,21 @@ const Dashboard = () => {
                       Last updated: {formatDate(post.updatedAt || post.createdAt)}
                     </p>
                   </div>
-                  <button className="rounded-lg px-2 py-1 text-xl text-[#6b6b6b] hover:bg-[#f3f3f3] dark:text-[#9aa0a6] dark:hover:bg-[#131820]">
-                    ...
-                  </button>
+                  <div className="p-2 flex flex-col items-center justify-center gap-4">
+                    <button className="rounded-lg px-2 py-1 text-xl text-[#6b6b6b] hover:bg-[#f3f3f3] dark:text-[#9aa0a6] dark:hover:bg-[#131820]">
+                      ...
+                    </button>
+                    <p  className="">
+                      <FiEdit onClick={()=>{
+                        navigate(`/dashboard/posts/${post.id}/edit`);
+                      }} className="hover:text-red-500"/>
+                    </p>
+                    <p  className="">
+                      <MdDeleteForever onClick={()=>{
+                        deletePost(post);
+                      }} className="hover:text-red-500"/>
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -103,10 +117,10 @@ const Dashboard = () => {
                     Start writing your first article
                   </p>
                 </div>
-                <button className="mt-2 inline-flex items-center gap-2 rounded-lg bg-[#1966ac] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#0f5897] dark:bg-[#008574] dark:hover:bg-[#009588]">
+                <NavLink to="/dashboard/posts/new" className="mt-2 inline-flex items-center gap-2 rounded-lg bg-[#1966ac] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#0f5897] dark:bg-[#008574] dark:hover:bg-[#009588]">
                   <FiPlus className="text-base" />
                   Create Article
-                </button>
+                </NavLink>
               </div>
             </div>
           )}
@@ -117,3 +131,5 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+

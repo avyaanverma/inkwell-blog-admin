@@ -29,10 +29,11 @@ export const PostProvider = ({children})=>{
 
     // addPost
     const addPost = (post)=>{
-        const id = posts.length;
+        const id = Date.now();
         const updatedPosts = [...posts, {
             id: id,
             createdAt: new Date(),
+            updatedAt: new Date(),
             ...post
         }]
         setPosts(updatedPosts)
@@ -43,19 +44,25 @@ export const PostProvider = ({children})=>{
             { label: "Published", value: publishedPosts, accent: "text-[#1966ac] dark:text-[#00a48f]" },
             { label: "Drafts", value: drafts, accent: "text-[#171717] dark:text-[#f5f5f5]" },
         ])
-        localStorage.setItem("posts", JSON.stringify(posts));
+        localStorage.setItem("posts", JSON.stringify(updatedPosts));
     }
     
     // editPost
     const editPost = (updatedPost)=>{
         const updatedPosts = posts.map((post)=> {
                 if(post.id === updatedPost.id){
-                    return { ...post, ...updatedPost}
+                    return { ...post, ...updatedPost, updatedAt: new Date() }
                 }else{
                     return post;
                 }
             })
         setPosts(updatedPosts)
+        let {publishedPosts, drafts} = calPosts(updatedPosts);
+        setStats([
+            { label: "Total Articles", value: publishedPosts + drafts, accent: "text-[#171717] dark:text-[#f5f5f5]" },
+            { label: "Published", value: publishedPosts, accent: "text-[#1966ac] dark:text-[#00a48f]" },
+            { label: "Drafts", value: drafts, accent: "text-[#171717] dark:text-[#f5f5f5]" },
+        ])
         localStorage.setItem("posts", JSON.stringify(updatedPosts));
 
     }
@@ -63,10 +70,16 @@ export const PostProvider = ({children})=>{
     // deletePost
     const deletePost = (post)=>{
         const id = post.id;
-        const updatedPost = posts.filter( (post) => id != post.id);
+        const updatedPosts = posts.filter( (post) => id != post.id);
 
-        setPosts([...updatedPost])
-        localStorage.setItem("posts", JSON.stringify(updatedPost));
+        let {publishedPosts, drafts} = calPosts(updatedPosts);
+        setPosts([...updatedPosts])
+        setStats([
+            { label: "Total Articles", value: publishedPosts + drafts, accent: "text-[#171717] dark:text-[#f5f5f5]" },
+            { label: "Published", value: publishedPosts, accent: "text-[#1966ac] dark:text-[#00a48f]" },
+            { label: "Drafts", value: drafts, accent: "text-[#171717] dark:text-[#f5f5f5]" },
+        ])
+        localStorage.setItem("posts", JSON.stringify(updatedPosts));
 
     }
 
