@@ -46,7 +46,7 @@ export const router = createBrowserRouter([
       {
         path: "posts/:id/edit",
         element: <NewPost/>
-      }
+      },
     ]
   }
 ]);

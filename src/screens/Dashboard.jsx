@@ -65,7 +65,9 @@ const Dashboard = () => {
                 >
                   <div className="space-y-2">
                     <div className="flex flex-wrap items-center gap-2">
-                      <p className="text-base font-semibold text-[#171717] dark:text-[#f5f5f5]">
+                      <p onClick={()=>{
+                        navigate(`/dashboard/posts/${post.id}/edit`);
+                      }} className="text-base font-semibold text-[#171717] hover:text-blue-500 hover:cursor-pointer dark:text-[#f5f5f5]">
                         {post.title || "Untitled"}
                       </p>
                       <span
@@ -92,7 +94,7 @@ const Dashboard = () => {
                     <p  className="">
                       <FiEdit onClick={()=>{
                         navigate(`/dashboard/posts/${post.id}/edit`);
-                      }} className="hover:text-red-500"/>
+                      }} className="hover:text-green-500"/>
                     </p>
                     <p  className="">
                       <MdDeleteForever onClick={()=>{

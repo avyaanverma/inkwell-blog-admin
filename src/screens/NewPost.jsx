@@ -11,23 +11,29 @@ const NewPost = () => {
             reset, 
             handleSubmit,
             setValue,
+            getValues,
             formState : {errors, isValid},
-        } = useForm({ mode: "onChange" });
+        } = useForm();
+    console.log(isValid);
     const [tags, setTags] = useState([]);
     const navigate = useNavigate();
-    const { id } = useParams();
-    let {posts, addPost, editPost} = usePost();
-    const isEdit = Boolean(id);
-    const existingPost = (posts || []).find((item) => String(item.id) === String(id));
 
-    useEffect(() => {
-      if (isEdit && existingPost) {
+    const { id } = useParams();
+    const isEdit = Boolean(id);
+
+    let {posts, addPost, editPost} = usePost();
+    
+    const existingPost = posts.find((post)=> post.id === id);
+    
+    useEffect(()=>{
+      if(isEdit && existingPost){
         reset({
-          title: existingPost.title || "",
-          excerpt: existingPost.excerpt || "",
-          content: existingPost.content || "",
-        });
-        const existingTags = existingPost.tags || [];
+          title: existingPost.title,
+          excerpt: existingPost.excerpt,
+          content: existingPost.content,
+        })
+
+        const existingTags = existingPost.tags;
         setTags(existingTags);
         setValue("tags", existingTags);
       }
@@ -46,7 +52,7 @@ const NewPost = () => {
               }
 
     const removeTag = (index)=>{
-      const newTags = tags.filter((_, i)=> i != index);
+      const newTags = tags.filter((tag)=> tag.id != index);
 
       setTags(newTags);
       setValue("tags", newTags);
@@ -54,26 +60,33 @@ const NewPost = () => {
 
     const handleFormSubmit = (data)=> {
       data.status = "published";
-      if (isEdit && existingPost) {
-        editPost({ ...existingPost, ...data });
-        toast.success("Post updated successfully.");
-      } else {
+      if(isEdit && existingPost){
+        editPost({...existingPost, ...data});
+        console.log(data);
+        toast.success("Edited successfully.")
+      }else{
         addPost(data);
-        toast.success("Post created successfully.");
+        console.log(data);
+        reset();
+        toast.success("Post created successfully.")
       }
-      reset();
+
       navigate("/dashboard");
     }
     const handleDraftSubmit = (data)=> {
       data.status = "draft";
-      if (isEdit && existingPost) {
-        editPost({ ...existingPost, ...data });
-        toast.success("Draft updated successfully.");
-      } else {
+      if(isEdit && existingPost){
+        editPost({...existingPost, ...data});
+        console.log(data);
+        toast.success("Edited successfully.");
+        
+      }else{
         addPost(data);
-        toast.success("Draft created successfully.");
+        console.log(data);
+        reset();
+        toast.success("Draft created successfully.")
+
       }
-      reset();
       navigate("/dashboard");
     }
 
@@ -86,7 +99,7 @@ const NewPost = () => {
 
       <div className="rounded-2xl border border-[#e4e4e4] bg-white/90 p-6 shadow-[0_12px_30px_rgba(13,20,26,0.08)] dark:border-[#1b1f24] dark:bg-[#0a0e11]/85 md:p-8">
         <h1 className="text-xl font-semibold text-[#171717] dark:text-[#f5f5f5]">
-          {isEdit ? "Edit Article" : "Create New Article"}
+          Create New Article
         </h1>
 
         <div className="mt-6 space-y-6">
@@ -145,7 +158,7 @@ const NewPost = () => {
             </label>
             <div className="flex gap-2">
               {
-                tags.map((tag, index) => <div key={index} className="flex gap-2 dark:bg-[#0f141a] dark:text-[#f5f5f5] justify-center items-center text-black dark:text-black bg-[#eeeeee] text-xs px-2 py-1 rounded-xl dark:text-white"> {tag} <IoMdClose onClick={()=> removeTag(index)}/></div>)
+                tags.map((tag, index) => <div key={index} className="flex gap-2 justify-center items-center text-black dark:text-black bg-[#eeeeee] text-xs px-2 py-1 rounded-xl dark:text-white"> {tag} <IoMdClose onClick={()=> removeTag(index)}/></div>)
               }
             </div>
             <input
@@ -154,7 +167,6 @@ const NewPost = () => {
               className="mt-2 w-full rounded-lg border border-[#d9d9d9] bg-white px-4 py-2 text-sm text-[#171717] outline-none transition focus:border-[#1966ac] focus:ring-2 focus:ring-[#1966ac]/30 dark:border-[#2a2f36] dark:bg-[#0f141a] dark:text-[#f5f5f5] dark:focus:border-[#00a48f] dark:focus:ring-[#00a48f]/30"
               onKeyDown={addTag}
             />
-            <input type="hidden" {...register("tags")} />
             <p className="mt-2 text-xs text-[#6b6b6b] dark:text-[#9aa0a6]">
               Add up to 5 tags to help readers find your article
             </p>
